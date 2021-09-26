@@ -1,3 +1,24 @@
+function updateTodoList() {
+  myArr = JSON.parse(localStorage.getItem("itemJson"));
+  let myBody = document.getElementById("tableBody");
+  let str = "";
+
+  myArr.forEach((element, index) => {
+    str += `
+            <tr>
+              <th scope="row">${index + 1}</th>
+              <td>${element[0]}</td>
+              <td>${element[1]}</td>
+             
+              <td><button class="btn btn-primary btn-sm" 
+              onclick="editTask(${index})">Edit</button></td>
+              <td><button class="btn btn-primary btn-sm" onclick="deleteTask(${index})">Delete</button></td>
+            
+       </tr>`;
+  });
+  myBody.innerHTML = str;     
+}
+
 function addTodoList() {
   if (
     document.getElementById("title").value != "" &&
@@ -15,34 +36,36 @@ function addTodoList() {
       myArr.push([title, descript]);
       localStorage.setItem("itemJson", JSON.stringify(myArr));
     }
+
     //populating the todo's table
     updateTodoList();
   }
 }
 
-function updateTodoList() {
-  myArr = JSON.parse(localStorage.getItem("itemJson"));
-  let myBody = document.getElementById("tableBody");
-  let str = "";
 
-  myArr.forEach((element, index) => {
-    str += `
-            <tr>
-              <th scope="row">${index + 1}</th>
-              <td>${element[0]}</td>
-              <td>${element[1]}</td>
-              <td><button class="btn btn-primary btn-sm" onclick="deleteTask(${index})">Delete</button></td>
-            </tr>`;
-  });
-  myBody.innerHTML = str;
-}
 
 function deleteTask(myIndex) {
-  console.log("inside delete finction");
+  console.log("inside delete function");
   let myTasks = JSON.parse(localStorage.getItem("itemJson"));
   myTasks.splice(myIndex, 1);
   localStorage.setItem("itemJson", JSON.stringify(myTasks));
   // location.reload();
+  updateTodoList();
+}
+
+function editTask(myIndex) {
+  console.log("inside edit function");
+  if (
+    document.getElementById("title").value != "" &&
+    document.getElementById("description").value != ""
+  ) {
+  let title = document.getElementById("title").value;
+  let descript = document.getElementById("description").value;
+  let myTasks = JSON.parse(localStorage.getItem("itemJson"));
+  myTasks.splice(myIndex, 1,[title, descript]);
+  localStorage.setItem("itemJson", JSON.stringify(myTasks));
+  // location.reload();
+  }
   updateTodoList();
 }
 
@@ -54,3 +77,7 @@ if (localStorage.getItem("itemJson") != null) {
 //adding todo's in my todo-list table
 let add = document.getElementById("add");
 add.addEventListener("click", addTodoList);
+console.log("add pushed");
+
+let edit = document.getElementById("edit");
+add.addEventListener("click", editTodoList);
