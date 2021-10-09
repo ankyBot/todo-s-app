@@ -1,27 +1,19 @@
-function addTodoList() {
-  if (
-    document.getElementById("title").value != "" &&
-    document.getElementById("description").value != ""
-  ) {
-    let myArr = [];
-    let title = document.getElementById("title").value;
-    let descript = document.getElementById("description").value;
+let title = document.getElementById("title");
+let descript = document.getElementById("description");
 
-    if (localStorage.getItem("itemJson") == null) {
-      myArr.push([title, descript]);
-      localStorage.setItem("itemJson", JSON.stringify(myArr));
-    } else {
-      myArr = JSON.parse(localStorage.getItem("itemJson"));
-      myArr.push([title, descript]);
-      localStorage.setItem("itemJson", JSON.stringify(myArr));
-    }
-    //populating the todo's table
-    updateTodoList();
-  }
+let add = document.getElementById("add");
+
+//deleting the tasks from todo's
+function deleteTask(myIndex) {
+  let myTasks = JSON.parse(localStorage.getItem("itemJson"));
+  myTasks.splice(myIndex, 1);
+  localStorage.setItem("itemJson", JSON.stringify(myTasks));
+  updateTodoList();
 }
 
+//populating the todo's table
 function updateTodoList() {
-  myArr = JSON.parse(localStorage.getItem("itemJson"));
+  let myArr = JSON.parse(localStorage.getItem("itemJson"));
   let myBody = document.getElementById("tableBody");
   let str = "";
 
@@ -37,13 +29,29 @@ function updateTodoList() {
   myBody.innerHTML = str;
 }
 
-function deleteTask(myIndex) {
-  console.log("inside delete finction");
-  let myTasks = JSON.parse(localStorage.getItem("itemJson"));
-  myTasks.splice(myIndex, 1);
-  localStorage.setItem("itemJson", JSON.stringify(myTasks));
-  // location.reload();
-  updateTodoList();
+//adding tasks to todo's
+function addTodoList() {
+  if (title.value != "" && descript.value != "") {
+    let myArr = [];
+
+    console.log(title.value);
+    console.log(descript.value);
+
+    if (localStorage.getItem("itemJson") == null) {
+      myArr.push([title.value, descript.value]);
+      localStorage.setItem("itemJson", JSON.stringify(myArr));
+    } else {
+      myArr = JSON.parse(localStorage.getItem("itemJson"));
+      myArr.push([title.value, descript.value]);
+      localStorage.setItem("itemJson", JSON.stringify(myArr));
+    }
+
+    updateTodoList();
+
+    //clearing input area
+    title.value = "";
+    descript.value = "";
+  }
 }
 
 //updating document, on start up
@@ -51,6 +59,5 @@ if (localStorage.getItem("itemJson") != null) {
   updateTodoList();
 }
 
-//adding todo's in my todo-list table
-let add = document.getElementById("add");
+//adding todo's button
 add.addEventListener("click", addTodoList);
