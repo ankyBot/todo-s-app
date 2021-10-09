@@ -1,6 +1,5 @@
 let title = document.getElementById("title");
 let descript = document.getElementById("description");
-
 let add = document.getElementById("add");
 
 //deleting the tasks from todo's
